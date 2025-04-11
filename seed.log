@@ -1,0 +1,462 @@
+Starting database seed...
+Cleaning up existing data...
+Cleaned up existing data
+Creating accounts...
+Created admin and user accounts
+Creating passengers...
+Created passengers
+Creating airlines...
+Creating airports...
+Creating aircraft...
+Created airlines, airports, and aircraft
+Creating routes...
+Created routes
+Creating flights...
+Created flights
+
+=== FLIGHTS BY DATE ===
+
+Date: 2025-04-06
+   AA101:
+      - Flight ID: 105
+      - Available Seats: 180
+      - Price: $99.99
+   AA102:
+      - Flight ID: 132
+      - Available Seats: 180
+      - Price: $288.99
+   DL301:
+      - Flight ID: 117
+      - Available Seats: 200
+      - Price: $324.99
+   DL302:
+      - Flight ID: 136
+      - Available Seats: 200
+      - Price: $444.99
+   UA201:
+      - Flight ID: 106
+      - Available Seats: 150
+      - Price: $169.98
+   UA202:
+      - Flight ID: 119
+      - Available Seats: 150
+      - Price: $444.99
+   WN401:
+      - Flight ID: 130
+      - Available Seats: 120
+      - Price: $408.99
+   WN402:
+      - Flight ID: 143
+      - Available Seats: 120
+      - Price: $421.99
+
+Date: 2025-04-07
+   AA101:
+      - Flight ID: 110
+      - Available Seats: 180
+      - Price: $99.99
+   AA102:
+      - Flight ID: 104
+      - Available Seats: 180
+      - Price: $288.99
+   DL301:
+      - Flight ID: 116
+      - Available Seats: 200
+      - Price: $483.99
+   DL302:
+      - Flight ID: 126
+      - Available Seats: 200
+      - Price: $437.99
+   UA201:
+      - Flight ID: 129
+      - Available Seats: 150
+      - Price: $169.98
+   UA202:
+      - Flight ID: 122
+      - Available Seats: 150
+      - Price: $393.99
+   WN401:
+      - Flight ID: 133
+      - Available Seats: 120
+      - Price: $352.99
+   WN402:
+      - Flight ID: 145
+      - Available Seats: 120
+      - Price: $439.99
+
+Date: 2025-04-08
+   AA101:
+      - Flight ID: 107
+      - Available Seats: 180
+      - Price: $99.99
+   AA102:
+      - Flight ID: 103
+      - Available Seats: 180
+      - Price: $396.99
+   DL301:
+      - Flight ID: 118
+      - Available Seats: 200
+      - Price: $263.99
+   DL302:
+      - Flight ID: 135
+      - Available Seats: 200
+      - Price: $207.99
+   UA201:
+      - Flight ID: 114
+      - Available Seats: 150
+      - Price: $169.98
+   UA202:
+      - Flight ID: 112
+      - Available Seats: 150
+      - Price: $355.99
+   WN401:
+      - Flight ID: 139
+      - Available Seats: 120
+      - Price: $398.99
+   WN402:
+      - Flight ID: 146
+      - Available Seats: 120
+      - Price: $275.99
+
+Date: 2025-04-09
+   AA101:
+      - Flight ID: 154
+      - Available Seats: 180
+      - Price: $99.99
+   AA102:
+      - Flight ID: 123
+      - Available Seats: 180
+      - Price: $228.99
+   DL301:
+      - Flight ID: 134
+      - Available Seats: 200
+      - Price: $311.99
+   DL302:
+      - Flight ID: 124
+      - Available Seats: 200
+      - Price: $339.99
+   UA201:
+      - Flight ID: 120
+      - Available Seats: 150
+      - Price: $169.98
+   UA202:
+      - Flight ID: 140
+      - Available Seats: 150
+      - Price: $364.99
+   WN401:
+      - Flight ID: 148
+      - Available Seats: 120
+      - Price: $349.99
+   WN402:
+      - Flight ID: 147
+      - Available Seats: 120
+      - Price: $386.99
+
+Date: 2025-04-10
+   AA101:
+      - Flight ID: 158
+      - Available Seats: 180
+      - Price: $99.99
+   AA102:
+      - Flight ID: 144
+      - Available Seats: 180
+      - Price: $365.99
+   DL301:
+      - Flight ID: 138
+      - Available Seats: 200
+      - Price: $381.99
+   DL302:
+      - Flight ID: 131
+      - Available Seats: 200
+      - Price: $293.99
+   UA201:
+      - Flight ID: 127
+      - Available Seats: 150
+      - Price: $169.98
+   UA202:
+      - Flight ID: 149
+      - Available Seats: 150
+      - Price: $279.99
+   WN401:
+      - Flight ID: 137
+      - Available Seats: 120
+      - Price: $339.99
+   WN402:
+      - Flight ID: 151
+      - Available Seats: 120
+      - Price: $432.99
+
+Date: 2025-04-11
+   AA101:
+      - Flight ID: 109
+      - Available Seats: 180
+      - Price: $99.99
+   AA102:
+      - Flight ID: 157
+      - Available Seats: 180
+      - Price: $224.99
+   DL301:
+      - Flight ID: 121
+      - Available Seats: 200
+      - Price: $408.99
+   DL302:
+      - Flight ID: 128
+      - Available Seats: 200
+      - Price: $492.99
+   UA201:
+      - Flight ID: 153
+      - Available Seats: 150
+      - Price: $169.98
+   UA202:
+      - Flight ID: 156
+      - Available Seats: 150
+      - Price: $247.99
+   WN401:
+      - Flight ID: 142
+      - Available Seats: 120
+      - Price: $461.99
+   WN402:
+      - Flight ID: 150
+      - Available Seats: 120
+      - Price: $334.99
+
+Date: 2025-04-12
+   AA101:
+      - Flight ID: 111
+      - Available Seats: 180
+      - Price: $99.99
+   AA102:
+      - Flight ID: 108
+      - Available Seats: 180
+      - Price: $428.99
+   DL301:
+      - Flight ID: 125
+      - Available Seats: 200
+      - Price: $438.99
+   DL302:
+      - Flight ID: 155
+      - Available Seats: 200
+      - Price: $347.99
+   UA201:
+      - Flight ID: 115
+      - Available Seats: 150
+      - Price: $169.98
+   UA202:
+      - Flight ID: 113
+      - Available Seats: 150
+      - Price: $273.99
+   WN401:
+      - Flight ID: 141
+      - Available Seats: 120
+      - Price: $480.99
+   WN402:
+      - Flight ID: 152
+      - Available Seats: 120
+      - Price: $465.99
+
+=== FLIGHT STATISTICS ===
+Total Dates: 7 (2025-04-06 to 2025-04-12)
+Flights per Date: 8
+Total Flights: 56
+
+=== DAILY ROUTE SCHEDULE ===
+
+AA101: JFK -> LAX
+   Departure: 08:00
+   Duration: 6h 0m
+   Aircraft: 1 (180 seats)
+
+AA102: LAX -> JFK
+   Departure: 10:00
+   Duration: 5h 30m
+   Aircraft: 1 (180 seats)
+
+UA201: SFO -> ORD
+   Departure: 09:00
+   Duration: 4h 0m
+   Aircraft: 2 (150 seats)
+
+UA202: ORD -> SFO
+   Departure: 11:00
+   Duration: 4h 30m
+   Aircraft: 2 (150 seats)
+
+DL301: MIA -> BOS
+   Departure: 12:00
+   Duration: 3h 0m
+   Aircraft: 3 (200 seats)
+
+DL302: BOS -> MIA
+   Departure: 14:00
+   Duration: 3h 15m
+   Aircraft: 3 (200 seats)
+
+WN401: DFW -> SEA
+   Departure: 14:00
+   Duration: 5h 0m
+   Aircraft: 4 (120 seats)
+
+WN402: SEA -> DFW
+   Departure: 16:00
+   Duration: 4h 45m
+   Aircraft: 4 (120 seats)
+Creating seat information...
+Created seat information
+Creating tickets...
+Created tickets
+
+Database seeding completed successfully!
+
+=== DETAILED SUMMARY ===
+
+=== ACCOUNTS ===
+1. Admin Account:
+   - Username: admin@example.com
+   - Role: ADMIN
+2. User Accounts:
+   - User1: user@example.com (USER)
+   - User2: user2@example.com (USER)
+
+=== PASSENGERS ===
+1. John Doe:
+   - ID: 24
+   - Birth Date: 1990-01-01
+   - Gender: male
+   - Contact: 1234567890
+   - Address: 123 Main St
+   - Account: 22
+2. Jane Smith:
+   - ID: 25
+   - Birth Date: 1992-05-15
+   - Gender: female
+   - Contact: 0987654321
+   - Address: 456 Oak Ave
+   - Account: 22
+3. Alice Johnson:
+   - ID: 26
+   - Birth Date: 1985-08-20
+   - Gender: female
+   - Contact: 5556667777
+   - Address: 789 Pine St
+   - Account: 23
+4. Bob Wilson:
+   - ID: 27
+   - Birth Date: 1988-12-10
+   - Gender: male
+   - Contact: 4443332222
+   - Address: 321 Elm St
+   - Account: 23
+
+=== AIRLINES ===
+AA: American Airlines
+UA: United Airlines
+DL: Delta Airlines
+WN: Southwest Airlines
+
+=== AIRCRAFT ===
+Aircraft 1:
+   - Capacity: 180 seats
+Aircraft 2:
+   - Capacity: 150 seats
+Aircraft 3:
+   - Capacity: 200 seats
+Aircraft 4:
+   - Capacity: 120 seats
+
+=== ROUTES ===
+AA101:
+   - From: JFK to LAX
+   - Departure: 08:00
+   - Duration: 6h 0m
+   - Aircraft: 1
+   - Operating: 2025-01-01 to 2025-12-31
+AA102:
+   - From: LAX to JFK
+   - Departure: 10:00
+   - Duration: 5h 30m
+   - Aircraft: 1
+   - Operating: 2025-01-01 to 2025-12-31
+UA201:
+   - From: SFO to ORD
+   - Departure: 09:00
+   - Duration: 4h 0m
+   - Aircraft: 2
+   - Operating: 2025-01-01 to 2025-12-31
+UA202:
+   - From: ORD to SFO
+   - Departure: 11:00
+   - Duration: 4h 30m
+   - Aircraft: 2
+   - Operating: 2025-01-01 to 2025-12-31
+DL301:
+   - From: MIA to BOS
+   - Departure: 12:00
+   - Duration: 3h 0m
+   - Aircraft: 3
+   - Operating: 2025-01-01 to 2025-12-31
+DL302:
+   - From: BOS to MIA
+   - Departure: 14:00
+   - Duration: 3h 15m
+   - Aircraft: 3
+   - Operating: 2025-01-01 to 2025-12-31
+WN401:
+   - From: DFW to SEA
+   - Departure: 14:00
+   - Duration: 5h 0m
+   - Aircraft: 4
+   - Operating: 2025-01-01 to 2025-12-31
+WN402:
+   - From: SEA to DFW
+   - Departure: 16:00
+   - Duration: 4h 45m
+   - Aircraft: 4
+   - Operating: 2025-01-01 to 2025-12-31
+
+=== TICKETS ===
+Ticket 22:
+   - Passenger ID: 24
+   - Flight ID: 105
+   - Seat Number: 1
+   - Price: $99.99
+Ticket 23:
+   - Passenger ID: 24
+   - Flight ID: 110
+   - Seat Number: 2
+   - Price: $99.99
+Ticket 24:
+   - Passenger ID: 25
+   - Flight ID: 107
+   - Seat Number: 1
+   - Price: $99.99
+
+=== STATISTICS ===
+Total Accounts: 3 (1 admin, 2 users)
+Total Passengers: 4
+Total Airlines: 4
+Total Aircraft: 4
+Total Routes: 8 (4 round-trip pairs)
+Total Flights: 56
+Total Tickets: 3
+
+=== ROUTE PAIRS ===
+1. American Airlines (AA):
+   JFK -> LAX: AA101 (6h 00m)
+   LAX -> JFK: AA102 (5h 30m)
+
+2. United Airlines (UA):
+   SFO -> ORD: UA201 (4h 00m)
+   ORD -> SFO: UA202 (4h 30m)
+
+3. Delta Airlines (DL):
+   MIA -> BOS: DL301 (3h 00m)
+   BOS -> MIA: DL302 (3h 15m)
+
+4. Southwest Airlines (WN):
+   DFW -> SEA: WN401 (5h 00m)
+   SEA -> DFW: WN402 (4h 45m)
+
+=== TEST CREDENTIALS ===
+Admin - username: admin@example.com, password: admin123
+User1 - username: user@example.com, password: user123
+User2 - username: user2@example.com, password: user456

@@ -1,0 +1,126 @@
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model airline {
+  code    String  @id @db.Char(2)
+  name    String  @db.VarChar(255)
+  routes  route[]
+  flights flight[]
+}
+
+model airport {
+  code                  String  @id @db.Char(3)
+  city                  String  @db.VarChar(255)
+  departure_flight_routes route[] @relation("departure_airport")
+  destination_flight_routes route[] @relation("destination_airport")
+}
+
+model aircraft {
+  id       Int     @id
+  capacity Int
+  routes   route[]
+}
+
+model route {
+  flight_number        Int
+  airline_code         String    @db.Char(2)
+  departure_airport    String    @db.Char(3)
+  destination_airport  String    @db.Char(3)
+  departure_time       Int       // Minutes since midnight (0-1439)
+  duration             Int       @db.Integer
+  aircraft_id          Int
+  start_date           DateTime  @db.Date
+  end_date             DateTime? @db.Date
+  flights              flight[]
+  airline              airline   @relation(fields: [airline_code], references: [code])
+  aircraft             aircraft  @relation(fields: [aircraft_id], references: [id])
+  departure_airport_rel airport   @relation("departure_airport", fields: [departure_airport], references: [code])
+  destination_airport_rel airport  @relation("destination_airport", fields: [destination_airport], references: [code])
+
+  @@id([flight_number, airline_code])
+}
+
+model flight {
+  id                Int        @id @default(autoincrement())
+  flight_number     Int
+  airline_code      String     @db.Char(2)
+  date              DateTime   @db.Date
+  available_tickets Int
+  price             Decimal    @db.Decimal(10, 2)
+  version           Int        @default(0)
+  route             route      @relation(fields: [flight_number, airline_code], references: [flight_number, airline_code], onDelete: Cascade)
+  airline           airline    @relation(fields: [airline_code], references: [code], onDelete: Cascade)
+  seat_infos        seat_info[]
+  tickets           ticket[]
+
+  @@unique([flight_number, airline_code, date])
+}
+
+model account {
+  id         Int         @id @default(autoincrement())
+  username   String      @unique @db.VarChar(255)
+  password   String      @db.VarChar(255)
+  role       role_type   @default(USER)
+  googleId  String?  @unique
+  passengers passenger[]
+}
+
+model passenger {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(255)
+  birth_date   DateTime @db.Date
+  gender       gender_type
+  address      String?  @db.VarChar(255)
+  phone_number String?  @db.VarChar(255)
+  account_id   Int
+  account      account  @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  tickets      ticket[]
+}
+
+model seat_info {
+  flight_id   Int
+  seat_number Int
+  seat_status seat_status_type @default(AVAILABLE)
+  version     Int              @default(0)
+  flight      flight           @relation(fields: [flight_id], references: [id], onDelete: Cascade)
+  tickets     ticket[]
+
+  @@id([flight_id, seat_number])
+}
+
+model ticket {
+  id           Int        @id @default(autoincrement())
+  passenger_id Int
+  flight_id    Int
+  seat_number  Int
+  price        Decimal    @db.Decimal(10, 2)
+  passenger    passenger  @relation(fields: [passenger_id], references: [id], onDelete: Cascade)
+  flight       flight     @relation(fields: [flight_id], references: [id], onDelete: Cascade)
+  seat_info    seat_info  @relation(fields: [flight_id, seat_number], references: [flight_id, seat_number])
+}
+
+enum gender_type {
+  male
+  female
+}
+
+enum role_type {
+  ADMIN
+  USER
+}
+
+enum seat_status_type {
+  AVAILABLE
+  UNAVAILABLE
+  BOOKED
+}

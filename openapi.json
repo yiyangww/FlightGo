@@ -1,0 +1,2997 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "FlightGo Backend API",
+    "version": "1.0.0",
+    "description": "FlightGo Backend API"
+  },
+  "servers": [
+    {
+      "url": "undefined",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Aircraft": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The aircraft ID"
+          },
+          "capacity": {
+            "type": "integer",
+            "description": "The capacity of the aircraft"
+          }
+        }
+      },
+      "Airline": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The airline code (2 uppercase letters)"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the airline"
+          }
+        }
+      },
+      "Airport": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The airport code (3 uppercase letters)"
+          },
+          "city": {
+            "type": "string",
+            "description": "The city where the airport is located"
+          }
+        }
+      },
+      "Flight": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The flight ID"
+          },
+          "flight_number": {
+            "type": "integer",
+            "description": "The route flight number"
+          },
+          "airline_code": {
+            "type": "string",
+            "description": "The airline code (2 uppercase letters)"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "The flight date (YYYY-MM-DD)"
+          },
+          "available_tickets": {
+            "type": "integer",
+            "description": "Number of available tickets"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "The price of the flight"
+          },
+          "version": {
+            "type": "integer",
+            "description": "Version for optimistic concurrency"
+          }
+        }
+      },
+      "PassengerInput": {
+        "type": "object",
+        "required": [
+          "name",
+          "birth_date",
+          "gender"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The passenger name (max 255 characters)"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "date",
+            "description": "The passenger birth date (YYYY-MM-DD)"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female"
+            ],
+            "description": "The passenger gender"
+          },
+          "address": {
+            "type": "string",
+            "description": "The passenger address (optional, max 255 characters)"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The passenger phone number (optional, max 255 characters)"
+          }
+        }
+      },
+      "Passenger": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The passenger ID (auto-generated)"
+          },
+          "name": {
+            "type": "string",
+            "description": "The passenger name"
+          },
+          "birth_date": {
+            "type": "string",
+            "format": "date",
+            "description": "The passenger birth date (YYYY-MM-DD)"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female"
+            ],
+            "description": "The passenger gender"
+          },
+          "address": {
+            "type": "string",
+            "description": "The passenger address (optional)"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "The passenger phone number (optional)"
+          },
+          "account_id": {
+            "type": "integer",
+            "description": "The associated account ID (automatically set from authentication token)"
+          }
+        }
+      },
+      "Route": {
+        "type": "object",
+        "properties": {
+          "flight_number": {
+            "type": "integer",
+            "description": "The route flight number"
+          },
+          "airline_code": {
+            "type": "string",
+            "description": "The airline code (2 uppercase letters)"
+          },
+          "departure_airport": {
+            "type": "string",
+            "description": "The departure airport code (3 uppercase letters)"
+          },
+          "destination_airport": {
+            "type": "string",
+            "description": "The destination airport code (3 uppercase letters)"
+          },
+          "departure_time": {
+            "type": "string",
+            "description": "The departure time (HH:mm)"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Flight duration in minutes"
+          },
+          "aircraft_id": {
+            "type": "integer",
+            "description": "The aircraft ID"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Route start date (YYYY-MM-DD)"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Route end date (YYYY-MM-DD)"
+          }
+        }
+      },
+      "SeatInfo": {
+        "type": "object",
+        "properties": {
+          "flight_id": {
+            "type": "integer",
+            "description": "The flight ID"
+          },
+          "seat_number": {
+            "type": "integer",
+            "description": "The seat number"
+          },
+          "seat_status": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "UNAVAILABLE",
+              "BOOKED"
+            ],
+            "description": "The status of the seat"
+          },
+          "version": {
+            "type": "integer",
+            "description": "Version for optimistic concurrency"
+          }
+        }
+      },
+      "Ticket": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The ticket ID"
+          },
+          "passenger_id": {
+            "type": "integer",
+            "description": "The passenger ID"
+          },
+          "flight_id": {
+            "type": "integer",
+            "description": "The flight ID"
+          },
+          "seat_number": {
+            "type": "integer",
+            "description": "The seat number"
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "description": "The ticket price"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/aircraft": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create a new aircraft",
+        "tags": [
+          "Aircraft"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Aircraft"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Aircraft created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aircraft"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all aircrafts",
+        "tags": [
+          "Aircraft"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of aircrafts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Aircraft"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          }
+        }
+      }
+    },
+    "/aircraft/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get an existing aircraft",
+        "tags": [
+          "Aircraft"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The aircraft ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aircraft found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aircraft"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Aircraft not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update an existing aircraft",
+        "tags": [
+          "Aircraft"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The aircraft ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "capacity": {
+                    "type": "integer",
+                    "description": "The new capacity of the aircraft"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Aircraft updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Aircraft"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Aircraft not found"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete an aircraft",
+        "tags": [
+          "Aircraft"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The aircraft ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Aircraft deleted successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Aircraft not found"
+          }
+        }
+      }
+    },
+    "/airline": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create a new airline (Admin only)",
+        "tags": [
+          "Airline"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Airline"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Airline created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airline"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all airlines",
+        "tags": [
+          "Airline"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of airlines",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Airline"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          }
+        }
+      }
+    },
+    "/airline/{code}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get an existing airline",
+        "tags": [
+          "Airline"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "description": "The airline code (2 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Airline found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airline"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Airline not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update an existing airline",
+        "tags": [
+          "Airline"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "description": "The airline code (2 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The new name of the airline"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Airline updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airline"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Airline not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete an existing airline",
+        "tags": [
+          "Airline"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "description": "The airline code (2 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Airline deleted successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Airline not found"
+          }
+        }
+      }
+    },
+    "/airport": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create a new airport (Admin only)",
+        "tags": [
+          "Airport"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Airport"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Airport created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airport"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all airports (Admin only)",
+        "tags": [
+          "Airport"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of airports",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Airport"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          }
+        }
+      }
+    },
+    "/airport/{code}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get an existing airport (Admin only)",
+        "tags": [
+          "Airport"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "description": "The airport code (3 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Airport found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airport"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Airport not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update an existing airport (Admin only)",
+        "tags": [
+          "Airport"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "description": "The airport code (3 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "description": "The new city of the airport"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Airport updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Airport"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Airport not found"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete an airport (Admin only)",
+        "tags": [
+          "Airport"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "code",
+            "required": true,
+            "description": "The airport code (3 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Airport deleted successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Airport not found"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Username (must be in email format)"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "User password"
+                  },
+                  "role": {
+                    "type": "string",
+                    "description": "User role (optional, defaults to USER)",
+                    "enum": [
+                      "USER",
+                      "ADMIN"
+                    ],
+                    "default": "USER"
+                  }
+                }
+              },
+              "example": {
+                "username": "user@example.com",
+                "password": "password123",
+                "role": "USER"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Registration successful"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "username": {
+                          "type": "string",
+                          "example": "user@example.com"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "USER"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Username already exists"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "User login",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Username (must be in email format)"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "User password"
+                  }
+                }
+              },
+              "example": {
+                "username": "user@example.com",
+                "password": "password123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "username": {
+                          "type": "string",
+                          "example": "user@example.com"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "USER"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/authTest": {
+      "get": {
+        "summary": "Test endpoint accessible by both USER and ADMIN roles",
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "username": {
+                          "type": "string",
+                          "example": "user@example.com"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "USER"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        }
+      }
+    },
+    "/auth/authUser": {
+      "get": {
+        "summary": "Endpoint accessible only by USER role",
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "username": {
+                          "type": "string",
+                          "example": "user@example.com"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "USER"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions (ADMIN role cannot access this endpoint)"
+          }
+        }
+      }
+    },
+    "/auth/authAdmin": {
+      "get": {
+        "summary": "Endpoint accessible only by ADMIN role",
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved admin information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "username": {
+                          "type": "string",
+                          "example": "admin@example.com"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "ADMIN"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions (USER role cannot access this endpoint)"
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "summary": "Initiate Google OAuth login",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to Google OAuth"
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "summary": "Google OAuth callback",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to Google OAuth"
+          }
+        }
+      }
+    },
+    "/flight": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create a new flight",
+        "tags": [
+          "Flight"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Flight"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Flight created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flight"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Route not found"
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all flights",
+        "tags": [
+          "Flight"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of flights",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flight"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          }
+        }
+      }
+    },
+    "/flight/search": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Search flights with filters",
+        "tags": [
+          "Flight"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "departure_airport",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Departure airport code (3 uppercase letters)"
+          },
+          {
+            "in": "query",
+            "name": "destination_airport",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Destination airport code (3 uppercase letters)"
+          },
+          {
+            "in": "query",
+            "name": "min_departure_time",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Minimum departure time (HH:mm)"
+          },
+          {
+            "in": "query",
+            "name": "max_departure_time",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Maximum departure time (HH:mm)"
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Flight date (YYYY-MM-DD)"
+          },
+          {
+            "in": "query",
+            "name": "min_price",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Minimum price"
+          },
+          {
+            "in": "query",
+            "name": "max_price",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Maximum price"
+          },
+          {
+            "in": "query",
+            "name": "min_duration",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Minimum flight duration in minutes"
+          },
+          {
+            "in": "query",
+            "name": "max_duration",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Maximum flight duration in minutes"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of matching flights",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flight"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input parameters"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          }
+        }
+      }
+    },
+    "/flight/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get an existing flight",
+        "tags": [
+          "Flight"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The flight ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flight found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flight"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Flight not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update an existing flight",
+        "tags": [
+          "Flight"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The flight ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "available_tickets": {
+                    "type": "integer"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "version": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Flight updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flight"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Flight not found"
+          },
+          "409": {
+            "description": "Version conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "currentVersion": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete a flight",
+        "tags": [
+          "Flight"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The flight ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Flight deleted successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Flight not found"
+          }
+        }
+      }
+    },
+    "/passenger": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create a new passenger for the authenticated user",
+        "tags": [
+          "Passenger"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PassengerInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Passenger created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Passenger"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Account not found"
+          }
+        }
+      }
+    },
+    "/passenger/mypassengers": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all passengers based on the authenticated account (JWT token)",
+        "tags": [
+          "Passenger"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all passengers belong to the authenticated account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Passenger"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid account_id format"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Account not found"
+          }
+        }
+      }
+    },
+    "/passenger/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get a passenger by ID",
+        "tags": [
+          "Passenger"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The passenger ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Passenger found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Passenger"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Passenger not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update a passenger",
+        "tags": [
+          "Passenger"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The passenger ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The passenger name (max 255 characters)"
+                  },
+                  "birth_date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "The passenger birth date (YYYY-MM-DD)"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "enum": [
+                      "male",
+                      "female"
+                    ],
+                    "description": "The passenger gender"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "The passenger address (optional, max 255 characters)"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "The passenger phone number (optional, max 255 characters)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Passenger updated successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Passenger not found"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete a passenger",
+        "tags": [
+          "Passenger"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The passenger ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Passenger deleted successfully"
+          },
+          "400": {
+            "description": "Cannot delete passenger with tickets"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Passenger not found"
+          }
+        }
+      }
+    },
+    "/api/pdf/test-upload": {
+      "post": {
+        "summary": "Upload a test PDF file",
+        "description": "Uploads a predefined test PDF file to Digital Ocean Spaces storage",
+        "tags": [
+          "PDF"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "description": "URL of the uploaded PDF file",
+                          "example": "https://bucket-name.nyc3.digitaloceanspaces.com/pdfs/test-1234567890.pdf"
+                        },
+                        "key": {
+                          "type": "string",
+                          "description": "Storage path of the file",
+                          "example": "pdfs/test-1234567890.pdf"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error uploading PDF"
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pdf/generate": {
+      "get": {
+        "summary": "Generate and upload a ticket PDF",
+        "description": "Generates a ticket PDF based on passenger ID and/or ticket ID and uploads it to Digital Ocean Spaces",
+        "tags": [
+          "PDF"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "passengerId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Passenger ID (optional if ticketId is provided)"
+          },
+          {
+            "in": "query",
+            "name": "ticketId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Ticket ID (optional if passengerId is provided)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF generated and uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "description": "URL of the uploaded PDF file",
+                          "example": "https://bucket-name.nyc3.digitaloceanspaces.com/pdfs/passenger-123-1234567890.pdf"
+                        },
+                        "key": {
+                          "type": "string",
+                          "description": "Storage path of the file",
+                          "example": "pdfs/passenger-123-1234567890.pdf"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Must provide either passenger ID or ticket ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No data found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error generating and uploading PDF"
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/route": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create a new route",
+        "tags": [
+          "Route"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Route"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Route created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Route"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Airline, airports or aircraft not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all routes",
+        "tags": [
+          "Route"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of routes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Route"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          }
+        }
+      }
+    },
+    "/route/{flight_number}/{airline_code}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get an existing route",
+        "tags": [
+          "Route"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flight_number",
+            "required": true,
+            "description": "The flight number",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "airline_code",
+            "required": true,
+            "description": "The airline code (2 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Route found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Route"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Route not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update an existing route",
+        "tags": [
+          "Route"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flight_number",
+            "required": true,
+            "description": "The flight number",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "airline_code",
+            "required": true,
+            "description": "The airline code (2 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Route"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Route updated successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Route not found"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete a route",
+        "tags": [
+          "Route"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flight_number",
+            "required": true,
+            "description": "The flight number",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "airline_code",
+            "required": true,
+            "description": "The airline code (2 uppercase letters)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Route deleted successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Route not found"
+          }
+        }
+      }
+    },
+    "/seat": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create a new seat info",
+        "tags": [
+          "SeatInfo"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flight_id": {
+                    "type": "integer",
+                    "description": "The flight ID"
+                  },
+                  "seat_number": {
+                    "type": "integer",
+                    "description": "The seat number"
+                  },
+                  "seat_status": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE",
+                      "UNAVAILABLE",
+                      "BOOKED"
+                    ],
+                    "description": "The seat status"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Seat info created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeatInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input or seat number exceeds capacity"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Flight not found"
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all seat infos",
+        "tags": [
+          "SeatInfo"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of seat infos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeatInfo"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          }
+        }
+      }
+    },
+    "/seat/{flight_id}/{seat_number}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get a seat info",
+        "tags": [
+          "SeatInfo"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flight_id",
+            "required": true,
+            "description": "The flight ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "seat_number",
+            "required": true,
+            "description": "The seat number",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Seat info found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeatInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Seat info not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update a seat info",
+        "tags": [
+          "SeatInfo"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flight_id",
+            "required": true,
+            "description": "The flight ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "seat_number",
+            "required": true,
+            "description": "The seat number",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "seat_status": {
+                    "type": "string",
+                    "enum": [
+                      "AVAILABLE",
+                      "UNAVAILABLE",
+                      "BOOKED"
+                    ]
+                  },
+                  "version": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Seat info updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeatInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input or cannot update booked seat"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Seat info not found"
+          },
+          "409": {
+            "description": "Version conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "currentVersion": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete a seat info",
+        "tags": [
+          "SeatInfo"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "flight_id",
+            "required": true,
+            "description": "The flight ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "seat_number",
+            "required": true,
+            "description": "The seat number",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Seat info deleted successfully"
+          },
+          "400": {
+            "description": "Cannot delete seat info with associated tickets"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Seat info not found"
+          }
+        }
+      }
+    },
+    "/ticket": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create a new ticket",
+        "tags": [
+          "Ticket"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ticket"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ticket created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ticket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input, no available tickets, or seat not available"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Passenger, flight, or seat not found"
+          }
+        }
+      },
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get all tickets (admin only)",
+        "tags": [
+          "Ticket"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all tickets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Ticket"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden, admin access required"
+          }
+        }
+      }
+    },
+    "/ticket/mytickets": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get current user's tickets or tickets by passenger ID",
+        "tags": [
+          "Ticket"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "passengerId",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Optional passenger ID to filter tickets (if not provided, returns all tickets for the authenticated user)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of tickets for the user or specified passenger",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Ticket"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "403": {
+            "description": "Forbidden You can only access tickets for your own passengers"
+          },
+          "404": {
+            "description": "No tickets found"
+          }
+        }
+      }
+    },
+    "/ticket/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get a ticket by ID",
+        "tags": [
+          "Ticket"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The ticket ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ticket found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ticket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Ticket not found"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update a ticket",
+        "tags": [
+          "Ticket"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The ticket ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "seat_number": {
+                    "type": "integer",
+                    "description": "The new seat number"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "The new ticket price"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ticket updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ticket"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input or new seat not available"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Ticket or new seat not found"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete a ticket",
+        "tags": [
+          "Ticket"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The ticket ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ticket deleted successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized, valid JWT token required"
+          },
+          "404": {
+            "description": "Ticket not found"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Aircraft",
+      "description": "Aircraft management operations"
+    },
+    {
+      "name": "Airline",
+      "description": "Airline management operations"
+    },
+    {
+      "name": "Airport",
+      "description": "Airport management operations"
+    },
+    {
+      "name": "Flight",
+      "description": "Flight management operations"
+    },
+    {
+      "name": "Passenger",
+      "description": "Passenger management operations"
+    },
+    {
+      "name": "Route",
+      "description": "Route management operations"
+    },
+    {
+      "name": "SeatInfo",
+      "description": "Seat information management operations"
+    },
+    {
+      "name": "Ticket",
+      "description": "Ticket management operations"
+    }
+  ]
+}
