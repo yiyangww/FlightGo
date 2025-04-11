@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AUTH_URL, GOOGLE_AUTH_URL } from "../config";
+import { API_BASE_URL, GOOGLE_AUTH_URL } from "../config";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -37,18 +37,22 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${AUTH_URL}/login`, {
+      console.log('Attempting login with:', { username, password });
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
+      console.log('Login response status:', response.status);
       const data = await response.json();
+      console.log('Login response data:', data);
       if (!response.ok) throw new Error(data.message || 'Login Failed');
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-      console.log(JSON.stringify(data.user));
+      console.log('Login successful, navigating to dashboard');
       navigate('/dashboard');
     } catch (err: any) {
+      console.error('Login error:', err);
       setError(err.message);
     } finally {
       setLoading(false);

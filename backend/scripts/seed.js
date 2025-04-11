@@ -4,7 +4,7 @@ const {
   formatDuration,
   formatDate,
 } = require("../src/utils/time.utils");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const prisma = new PrismaClient();
 
 // Helper function to wait
