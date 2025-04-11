@@ -203,6 +203,30 @@ Click your username in the navbar to access your profile:
 
 ## Development Guide
 
+### Docker Instructions
+
+If you use Docker to run the application:
+
+1. Start the application:
+
+```bash
+docker-compose up --build
+```
+
+2. Stop the application (keeping containers):
+
+```bash
+docker-compose stop
+```
+
+3. Stop and remove containers, networks, and volumes:
+
+```bash
+docker-compose down
+```
+
+### Local Development Setup
+
 > The following guide has been tested on:
 >
 > MacOS:
@@ -222,7 +246,7 @@ Click your username in the navbar to access your profile:
 > - Chrome
 
 ```
-git clone https://github.com/GuanhongW/ECE1724ReactProject.git
+git clone https://github.com/yiyangww/FlightGo.git
 ```
 
 ```
