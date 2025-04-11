@@ -15,8 +15,15 @@ services:
       - VITE_API_URL=http://localhost:3000
       - VITE_GOOGLE_AUTH_URL=http://localhost:3000/auth/google
       - VITE_AUTH_URL=http://localhost:3000/auth
+      - NODE_OPTIONS=--max-old-space-size=4096
     depends_on:
       - db
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
 
   db:
     image: postgres:14
@@ -29,6 +36,12 @@ services:
       POSTGRES_DB: airline_reservation_system
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
 
 volumes:
   postgres_data:

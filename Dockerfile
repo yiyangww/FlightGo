@@ -2,6 +2,8 @@
 FROM node:20-bullseye AS frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
+# Increase memory limit for npm install
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm install
 COPY frontend/ .
 # Set environment variables for the build
@@ -14,6 +16,8 @@ RUN npm run build
 FROM node:20-bullseye AS backend-build
 WORKDIR /app/backend
 RUN apt-get update && apt-get install -y python3 make g++
+# Increase memory limit for npm install
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 COPY backend/package*.json ./
 RUN npm install
 COPY backend/ .
