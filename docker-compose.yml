@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   app:
+    container_name: flightgo-app-new
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,7 +14,8 @@ services:
       - NODE_ENV=production
       - NODE_OPTIONS=--max-old-space-size=4096
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -22,6 +24,7 @@ services:
           memory: 2G
 
   db:
+    container_name: flightgo-db-new
     image: postgres:14
     restart: always
     ports:
@@ -32,6 +35,11 @@ services:
       POSTGRES_DB: airline_reservation_system
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     deploy:
       resources:
         limits:

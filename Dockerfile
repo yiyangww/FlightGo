@@ -21,6 +21,7 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 COPY backend/package*.json ./
 RUN npm install
 COPY backend/ .
+RUN npx prisma generate
 
 # ===== final stage =====
 FROM node:20-bullseye
@@ -34,6 +35,6 @@ COPY --from=backend-build /app/backend/node_modules /app/backend/node_modules
 # Expose only backend port
 EXPOSE 3000
 
-# Start only the backend server
-CMD ["sh", "-c", "cd /app/backend && sleep 3 && npx prisma generate && npx prisma migrate deploy && node scripts/seed.js && npm start"]
+# Start only the backend server with increased wait time
+CMD ["sh", "-c", "cd /app/backend && sleep 10 && npx prisma migrate deploy && node scripts/seed.js && npm start"]
 
