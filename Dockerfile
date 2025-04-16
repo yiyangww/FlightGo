@@ -36,4 +36,5 @@ COPY --from=backend-build /app/backend/node_modules /app/backend/node_modules
 EXPOSE 3000
 
 # Start only the backend server
-CMD ["sh", "-c", "cd /app/backend && sleep 3 && npx prisma migrate deploy && node scripts/seed.js && npm start"]
+CMD ["sh", "-c", "cd /app/backend && sleep 3 && npx prisma generate && npx prisma migrate deploy && node scripts/seed.js && npm start"]
+
