@@ -6,15 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"
       - "3000:3000"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/airline_reservation_system
       - JWT_SECRET=your_jwt_secret
       - NODE_ENV=production
-      - VITE_API_URL=http://localhost:3000
-      - VITE_GOOGLE_AUTH_URL=http://localhost:3000/auth/google
-      - VITE_AUTH_URL=http://localhost:3000/auth
       - NODE_OPTIONS=--max-old-space-size=4096
     depends_on:
       - db
