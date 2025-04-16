@@ -21,7 +21,6 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 COPY backend/package*.json ./
 RUN npm install
 COPY backend/ .
-RUN npx prisma generate
 
 # ===== final stage =====
 FROM node:20-bullseye
