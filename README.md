@@ -1,10 +1,8 @@
 # Flight Booking System —— FlightGo
 
-cuurently the original project repo is private, s summary here.
+Deployed with DigitalOcean:
 
-temporary url:
-
-`https://wgh0201.synology.me:5173`
+`https://flightgo-qnfvw.ondigitalocean.app/`
 
 ## Table of Contents
 
