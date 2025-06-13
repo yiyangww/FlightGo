@@ -10,29 +10,36 @@ const prisma = new PrismaClient();
 // Helper function to wait
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Helper function to safely delete records
+async function safeDelete(model) {
+  try {
+    await prisma[model].deleteMany();
+    await wait(500);
+    console.log(`Cleaned up ${model}`);
+  } catch (error) {
+    if (error.code === "P2021") {
+      console.log(`Table ${model} does not exist yet, skipping cleanup`);
+    } else {
+      throw error;
+    }
+  }
+}
+
 async function seed() {
   try {
     console.log("Starting database seed...");
 
     // Clean up existing data in reverse order of dependencies
     console.log("Cleaning up existing data...");
-    await prisma.ticket.deleteMany();
-    await wait(500); // Wait for tickets to be deleted
-
-    await prisma.seat_info.deleteMany();
-    await wait(500); // Wait for seat info to be deleted
-
-    await prisma.flight.deleteMany();
-    await wait(500); // Wait for flights to be deleted
-
-    await prisma.route.deleteMany();
-    await wait(500); // Wait for routes to be deleted
-
-    await prisma.aircraft.deleteMany();
-    await prisma.airline.deleteMany();
-    await prisma.airport.deleteMany();
-    await prisma.passenger.deleteMany();
-    await prisma.account.deleteMany();
+    await safeDelete("ticket");
+    await safeDelete("seat_info");
+    await safeDelete("flight");
+    await safeDelete("route");
+    await safeDelete("aircraft");
+    await safeDelete("airline");
+    await safeDelete("airport");
+    await safeDelete("passenger");
+    await safeDelete("account");
 
     await wait(1000); // Wait for all deletions to complete
     console.log("Cleaned up existing data");

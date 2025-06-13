@@ -34,6 +34,33 @@ COPY --from=backend-build /app/backend/node_modules /app/backend/node_modules
 # Expose only backend port
 EXPOSE 3000
 
-# Start only the backend server
-CMD ["sh", "-c", "cd /app/backend && sleep 3 && npx prisma generate && npx prisma migrate deploy && node scripts/seed.js && npm start"]
+# 创建启动脚本
+RUN echo '#!/bin/sh\n\
+echo "Checking DATABASE_URL..."\n\
+if [ -z "$DATABASE_URL" ]; then\n\
+  echo "Error: DATABASE_URL is not set"\n\
+  exit 1\n\
+fi\n\
+\n\
+echo "Generating Prisma client..."\n\
+npx prisma generate\n\
+\n\
+echo "Waiting for database..."\n\
+sleep 10\n\
+\n\
+echo "Running database migrations..."\n\
+npx prisma migrate deploy\n\
+\n\
+echo "Seeding database..."\n\
+node scripts/seed.js\n\
+\n\
+echo "Starting application..."\n\
+npm start\n\
+' > /app/backend/start.sh && chmod +x /app/backend/start.sh
+
+# 设置工作目录
+WORKDIR /app/backend
+
+# 启动应用
+CMD ["/app/backend/start.sh"]
 
