@@ -21,6 +21,8 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 COPY backend/package*.json ./
 RUN npm install
 COPY backend/ .
+# Explicitly copy the prisma directory to ensure migrations are included
+COPY backend/prisma ./prisma
 
 # ===== final stage =====
 FROM node:20-bullseye
