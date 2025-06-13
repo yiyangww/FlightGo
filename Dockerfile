@@ -48,6 +48,10 @@ npx prisma generate\n\
 echo "Waiting for database..."\n\
 sleep 10\n\
 \n\
+echo "Verifying prisma migrations directory..."\n\
+ls -la prisma\n\
+ls -la prisma/migrations\n\
+\n\
 echo "Running database migrations..."\n\
 npx prisma migrate deploy\n\
 \n\
