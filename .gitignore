@@ -3,6 +3,5 @@
 /node_modules
 package-lock.json
 /backend/node_modules
-/backend/prisma/migrations
 /backend/prisma/ERD.svg
 
