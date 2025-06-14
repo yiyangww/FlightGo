@@ -8,14 +8,25 @@ const DashboardPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setError("Unauthorized: No token found.");
+      navigate("/login");
+    } else {
+      // Optionally, set user and role state here if needed for rendering
+      // For now, fetching directly from localStorage is fine for initial render
+    }
+  }, [navigate]); // Add navigate to dependency array
+
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const role = user?.role || "user";
-  const token = localStorage.getItem("token");
-  
-  if (!token) {
-        setError("Unauthorized: No token found.");
-        navigate("/login");
-        return;
+
+  if (error && !loading) {
+    return <p className="text-red-500">{error}</p>; // Render error message if unauthorized
   }
 
   return (
