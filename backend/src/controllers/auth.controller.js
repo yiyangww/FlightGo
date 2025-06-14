@@ -163,9 +163,7 @@ exports.googleCallback = async (req, res) => {
     });
 
     // Redirect to frontend page, and pass the token
-    return res.redirect(
-      `${process.env.FRONTEND_URL}/auth/google/callback?token=${token}`
-    );
+    return res.redirect(`${process.env.FRONTEND_URL}/dashboard?token=${token}`);
   } catch (error) {
     // Handle unexpected errors
     console.error("Google OAuth callback unexpected error:", error);
