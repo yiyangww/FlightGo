@@ -248,7 +248,7 @@ git clone https://github.com/yiyangww/FlightGo.git
 ```
 
 ```
-cd ECE1724ReactProject
+cd FlightGo
 ```
 
 ### Database Setup
@@ -364,7 +364,7 @@ Under `backend` folder:
 1. Under `backend` folder, run the seed script to clean up any existing data and populate some basic data for testing. <br/>
    The seed script will create one admin account `admin@example.com` with password `admin123` and two users `user1@example.com` with password `user123` and `user2@example.com` with password `user456`.
    > Note: This step is optional, you can skip it if you do not want to populate data. Also, the seed script does not reset the database, so the id will increase in each run.
-   > You can check the [seed.log](https://github.com/GuanhongW/ECE1724ReactProject/blob/031fa48c0640f68aa022cb50e87b5bbfeaca27e6/seed.log) file or your terminal output for the created data that can be used to test our application.
+   > You can check the [seed.log](https://github.com/yiyangww/FlightGo/blob/main/seed.log) file or your terminal output for the created data that can be used to test our application.
    ```
    npm run seed
    ```
@@ -431,9 +431,9 @@ We welcome contributions to FlightGo! This document outlines the process and gui
 ### Getting Started
 
 1. Fork the repository
-2. Clone your fork:
+2. Clone your fork
    ```bash
-   git clone https://github.com/YOUR-USERNAME/ECE1724ReactProject.git
+   git clone https://github.com/yiyangww/FlightGo.git
    ```
 3. Set up your development environment following the [Development Guide](#development-guide)
 4. Create a new branch for your feature/fix:
